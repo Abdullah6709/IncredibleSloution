@@ -71,7 +71,7 @@ export default function HeroSection({ onSubmitForm }) {
         position: 'relative',
         bgcolor: '#081c38',
         color: 'white',
-        py: { xs: 6, md: 8 },
+        py: { xs: 4, sm: 6, md: 8 },
         backgroundImage: `linear-gradient(90deg, rgba(8,28,56,0.96) 0%, rgba(8,28,56,0.85) 50%, rgba(8,28,56,0.95) 100%), url('/assets/images/hero_ups.jpg')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
@@ -79,7 +79,7 @@ export default function HeroSection({ onSubmitForm }) {
       }}
     >
       <Container maxWidth="xl">
-        <Grid container spacing={4} alignItems="center">
+        <Grid container spacing={{ xs: 3, md: 4 }} alignItems="center">
           {/* Left Content */}
           <Grid item xs={12} lg={7}>
             <Typography
@@ -87,8 +87,8 @@ export default function HeroSection({ onSubmitForm }) {
               sx={{
                 color: 'rgba(255,255,255,0.85)',
                 fontWeight: 800,
-                letterSpacing: 2,
-                fontSize: '0.8rem',
+                letterSpacing: 1.5,
+                fontSize: { xs: '0.72rem', sm: '0.8rem' },
                 textTransform: 'uppercase',
                 mb: 1
               }}
@@ -99,10 +99,10 @@ export default function HeroSection({ onSubmitForm }) {
             <Typography
               variant="h1"
               sx={{
-                fontSize: { xs: '2.2rem', sm: '3rem', md: '3.6rem' },
+                fontSize: { xs: '1.8rem', sm: '2.8rem', md: '3.6rem' },
                 color: 'white',
-                lineHeight: 1.1,
-                mb: 2
+                lineHeight: 1.15,
+                mb: { xs: 1.5, sm: 2 }
               }}
             >
               Online UPS <br />
@@ -116,18 +116,26 @@ export default function HeroSection({ onSubmitForm }) {
               variant="body1"
               sx={{
                 color: 'rgba(255, 255, 255, 0.88)',
-                fontSize: { xs: '1rem', sm: '1.15rem' },
-                mb: 4,
+                fontSize: { xs: '0.92rem', sm: '1.15rem' },
+                mb: { xs: 2, sm: 4 },
                 maxWidth: 620,
-                lineHeight: 1.5
+                lineHeight: 1.45
               }}
             >
               High-Performance Online UPS Systems from 1 kVA to 1000+ kVA for Industrial, Commercial, IT & Critical Power Applications.
             </Typography>
 
-            {/* 4 Badges Grid */}
-            <Grid container spacing={2} sx={{ mb: 4, maxWidth: 600 }}>
-              <Grid item xs={6} sm={3}>
+            {/* 4 Badges Grid - Hidden on Extra Small (XS) screens for clean mobile layout */}
+            <Grid
+              container
+              spacing={2}
+              sx={{
+                mb: 4,
+                maxWidth: 600,
+                display: { xs: 'none', sm: 'flex' }
+              }}
+            >
+              <Grid item sm={3}>
                 <Stack alignItems="center" textAlign="center" spacing={1}>
                   <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', width: 48, height: 48 }}>
                     <BoltIcon sx={{ color: '#ffaa00' }} />
@@ -138,7 +146,7 @@ export default function HeroSection({ onSubmitForm }) {
                 </Stack>
               </Grid>
 
-              <Grid item xs={6} sm={3}>
+              <Grid item sm={3}>
                 <Stack alignItems="center" textAlign="center" spacing={1}>
                   <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', width: 48, height: 48 }}>
                     <ShieldIcon sx={{ color: '#ffaa00' }} />
@@ -149,7 +157,7 @@ export default function HeroSection({ onSubmitForm }) {
                 </Stack>
               </Grid>
 
-              <Grid item xs={6} sm={3}>
+              <Grid item sm={3}>
                 <Stack alignItems="center" textAlign="center" spacing={1}>
                   <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', width: 48, height: 48 }}>
                     <TimerIcon sx={{ color: '#ffaa00' }} />
@@ -160,7 +168,7 @@ export default function HeroSection({ onSubmitForm }) {
                 </Stack>
               </Grid>
 
-              <Grid item xs={6} sm={3}>
+              <Grid item sm={3}>
                 <Stack alignItems="center" textAlign="center" spacing={1}>
                   <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', width: 48, height: 48 }}>
                     <EnergySavingsLeafIcon sx={{ color: '#ffaa00' }} />
@@ -172,8 +180,12 @@ export default function HeroSection({ onSubmitForm }) {
               </Grid>
             </Grid>
 
-            {/* 3 Action Buttons */}
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+            {/* Action Buttons Row - Streamlined for XS view */}
+            <Stack
+              direction={{ xs: 'column', sm: 'row' }}
+              spacing={{ xs: 1.5, sm: 2 }}
+              sx={{ mb: { xs: 2, lg: 0 } }}
+            >
               <Button
                 variant="contained"
                 size="large"
@@ -184,9 +196,10 @@ export default function HeroSection({ onSubmitForm }) {
                   bgcolor: '#ffaa00',
                   color: '#0b2545',
                   fontWeight: 800,
-                  py: 1.6,
+                  py: 1.4,
                   px: 3,
-                  fontSize: '0.98rem',
+                  fontSize: '0.95rem',
+                  display: { xs: 'none', sm: 'inline-flex' },
                   '&:hover': { bgcolor: '#ffb72b' }
                 }}
               >
@@ -203,9 +216,10 @@ export default function HeroSection({ onSubmitForm }) {
                   bgcolor: '#0056b3',
                   color: 'white',
                   fontWeight: 800,
-                  py: 1.6,
+                  py: 1.4,
                   px: 3,
-                  fontSize: '0.98rem',
+                  fontSize: '0.95rem',
+                  display: { xs: 'none', sm: 'inline-flex' },
                   '&:hover': { bgcolor: '#004494' }
                 }}
               >
@@ -220,7 +234,13 @@ export default function HeroSection({ onSubmitForm }) {
                 component="a"
                 href="https://wa.me/919891916223?text=Hi%20Incredible%20Solutions,%20I%20want%20to%20get%20a%20quote%20for%20Online%20UPS"
                 target="_blank"
-                sx={{ fontWeight: 800, py: 1.6, px: 3, fontSize: '0.98rem' }}
+                sx={{
+                  fontWeight: 800,
+                  py: 1.4,
+                  px: 3,
+                  fontSize: '0.95rem',
+                  width: { xs: '100%', sm: 'auto' }
+                }}
               >
                 WhatsApp Us
               </Button>
@@ -234,23 +254,33 @@ export default function HeroSection({ onSubmitForm }) {
               sx={{
                 bgcolor: 'white',
                 color: 'text.primary',
-                p: { xs: 3, sm: 4 },
-                borderRadius: 4,
+                p: { xs: 2.5, sm: 4 },
+                borderRadius: { xs: 3, sm: 4 },
                 boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
                 border: '1px solid rgba(255,255,255,0.2)'
               }}
             >
-              <Box sx={{ bgcolor: '#0b2545', color: 'white', m: -4, mb: 3, p: 3, borderTopLeftRadius: 16, borderTopRightRadius: 16 }}>
-                <Typography variant="h5" sx={{ fontWeight: 800, color: 'white', mb: 0.5 }}>
+              <Box
+                sx={{
+                  bgcolor: '#0b2545',
+                  color: 'white',
+                  m: { xs: -2.5, sm: -4 },
+                  mb: { xs: 2.5, sm: 3 },
+                  p: { xs: 2, sm: 3 },
+                  borderTopLeftRadius: { xs: 12, sm: 16 },
+                  borderTopRightRadius: { xs: 12, sm: 16 }
+                }}
+              >
+                <Typography variant="h5" sx={{ fontWeight: 800, color: 'white', mb: 0.5, fontSize: { xs: '1.25rem', sm: '1.5rem' } }}>
                   Get Instant Quote
                 </Typography>
-                <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.8)', display: 'block' }}>
+                <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.8)', display: 'block', fontSize: { xs: '0.75rem', sm: '0.8rem' } }}>
                   Fill in your details and our UPS experts will get back to you shortly.
                 </Typography>
               </Box>
 
               <form onSubmit={handleSubmit}>
-                <Stack spacing={2}>
+                <Stack spacing={{ xs: 1.5, sm: 2 }}>
                   <TextField
                     fullWidth
                     size="small"
@@ -349,17 +379,17 @@ export default function HeroSection({ onSubmitForm }) {
                       bgcolor: '#ffaa00',
                       color: '#0b2545',
                       fontWeight: 800,
-                      py: 1.5,
-                      fontSize: '1rem',
+                      py: 1.4,
+                      fontSize: '0.98rem',
                       '&:hover': { bgcolor: '#ffb72b' }
                     }}
                   >
                     Submit Enquiry
                   </Button>
 
-                  <Stack direction="row" spacing={1} justifyContent="center" alignItems="center" sx={{ mt: 1 }}>
-                    <LockIcon sx={{ fontSize: 16, color: 'success.main' }} />
-                    <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>
+                  <Stack direction="row" spacing={1} justifyContent="center" alignItems="center" sx={{ mt: 0.5 }}>
+                    <LockIcon sx={{ fontSize: 14, color: 'success.main' }} />
+                    <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600, fontSize: '0.72rem' }}>
                       Your data is safe with us
                     </Typography>
                   </Stack>
