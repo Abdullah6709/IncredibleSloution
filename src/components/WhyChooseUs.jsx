@@ -25,7 +25,7 @@ export default function WhyChooseUs() {
             <Typography variant="h5" sx={{ color: 'primary.main', fontWeight: 800, lineHeight: 1.2 }}>
               Why Choose <br />
               <Box component="span" sx={{ color: 'secondary.main' }}>
-                Incredible Solutions?
+                Incredible Solution?
               </Box>
             </Typography>
           </Grid>

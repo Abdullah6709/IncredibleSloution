@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Incredible Solutions - Interactive Logic & Dynamics
+   Incredible Solution - Interactive Logic & Dynamics
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnWaDispatch) {
     btnWaDispatch.addEventListener('click', () => {
       const waNumber = '919891916223';
-      const text = `Hi Incredible Solutions, I am interested in an Online UPS Enquiry:
+      const text = `Hi Incredible Solution, I am interested in an Online UPS Enquiry:
 - Name: ${currentFormData.name}
 - Mobile: ${currentFormData.mobile}
 - Email: ${currentFormData.email || 'N/A'}
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnMailDispatch.addEventListener('click', () => {
       const mailEmail = 'raturiincredible@gmail.com';
       const subject = `Online UPS Enquiry from ${currentFormData.name}`;
-      const body = `Hi Incredible Solutions Team,
+      const body = `Hi Incredible Solution Team,
 
 I would like to request a quote / consultation for Online UPS systems:
 

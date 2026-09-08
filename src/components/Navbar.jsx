@@ -18,6 +18,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import TopBar from './TopBar';
+import logo from '../../assets/images/Incredible Solution Logo.jpeg';
 
 const navItems = [
   { label: 'Home', href: '#home' },
@@ -47,27 +48,14 @@ export default function Navbar() {
             {/* Brand Logo */}
             <Box component="a" href="#home" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none' }}>
               <Box
-                sx={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 2,
-                  background: 'linear-gradient(135deg, #061a33 0%, #0056b3 100%)',
-                  color: 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 800,
-                  fontSize: '1.5rem',
-                  fontFamily: 'Outfit, sans-serif',
-                  boxShadow: '0 4px 14px rgba(0, 86, 179, 0.3)',
-                  border: '1px solid rgba(255,255,255,0.2)'
-                }}
-              >
-                IS
-              </Box>
+                component="img"
+                src={logo}
+                alt="Incredible Solution logo"
+                sx={{ width: 48, height: 48, objectFit: 'contain' }}
+              />
               <Box>
                 <Typography variant="h6" sx={{ color: '#061a33', fontWeight: 800, lineHeight: 1.1, fontSize: { xs: '1.15rem', sm: '1.38rem' } }}>
-                  Incredible Solutions
+                  Incredible Solution
                 </Typography>
                 <Typography variant="caption" sx={{ color: '#0056b3', fontWeight: 800, display: 'block', fontSize: '0.68rem', letterSpacing: 0.8 }}>
                   POWERING A BRIGHTER TOMORROW

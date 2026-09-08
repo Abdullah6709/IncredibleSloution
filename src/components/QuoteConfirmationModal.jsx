@@ -21,7 +21,7 @@ export default function QuoteConfirmationModal({ open, data, onClose }) {
 
   const handleWhatsAppDispatch = () => {
     const waNumber = '919891916223';
-    const text = `Hi Incredible Solutions, I am interested in an Online UPS Enquiry:
+    const text = `Hi Incredible Solution, I am interested in an Online UPS Enquiry:
 - Name: ${data.name}
 - Mobile: ${data.mobile}
 - Email: ${data.email || 'N/A'}
@@ -36,7 +36,7 @@ export default function QuoteConfirmationModal({ open, data, onClose }) {
   const handleEmailDispatch = () => {
     const mailEmail = 'raturiincredible@gmail.com';
     const subject = `Online UPS Enquiry from ${data.name}`;
-    const body = `Hi Incredible Solutions Team,
+    const body = `Hi Incredible Solution Team,
 
 I would like to request a quote / consultation for Online UPS systems:
 
@@ -72,7 +72,7 @@ ${data.name}`;
           </IconButton>
         </Box>
         <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.5 }}>
-          Choose how you would like to submit your enquiry to Incredible Solutions:
+          Choose how you would like to submit your enquiry to Incredible Solution:
         </Typography>
       </DialogTitle>
 

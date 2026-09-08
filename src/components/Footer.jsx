@@ -33,7 +33,7 @@ export default function Footer() {
                 </Box>
                 <Box>
                   <Typography variant="h6" sx={{ color: 'white', fontWeight: 800, lineHeight: 1.1 }}>
-                    Incredible Solutions
+                    Incredible Solution
                   </Typography>
                   <Typography variant="caption" sx={{ color: '#ffaa00', fontWeight: 700, letterSpacing: 0.5 }}>
                     POWERING A BRIGHTER TOMORROW
