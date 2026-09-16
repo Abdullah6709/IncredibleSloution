@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Container, Grid, Typography, Paper, TextField, MenuItem, Button, Box, Stack } from '@mui/material';
+import { Container, Grid, Typography, Paper, TextField, MenuItem, Button, Box, Stack, CircularProgress } from '@mui/material';
 import PhoneIcon from '@mui/icons-material/Phone';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import EmailIcon from '@mui/icons-material/Email';
 import SendIcon from '@mui/icons-material/Send';
+import { sendEnquiryEmail } from '../services/emailService';
 
 const cities = [
   'Delhi NCR', 'Mumbai', 'Bengaluru', 'Chennai', 'Hyderabad', 'Kolkata', 'Pune', 'Ahmedabad', 'Other City in India'
@@ -20,6 +21,7 @@ const capacities = [
 ];
 
 export default function ContactSection({ onSubmitForm }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     mobile: '',
@@ -33,13 +35,17 @@ export default function ContactSection({ onSubmitForm }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.mobile) {
       alert('Please fill in your Name and Mobile Number.');
       return;
     }
-    onSubmitForm(formData);
+    setIsSubmitting(true);
+    const result = await sendEnquiryEmail(formData);
+    setIsSubmitting(false);
+
+    onSubmitForm(formData, result);
   };
 
   return (
@@ -201,10 +207,11 @@ export default function ContactSection({ onSubmitForm }) {
                     variant="contained"
                     color="warning"
                     size="large"
-                    endIcon={<SendIcon />}
+                    disabled={isSubmitting}
+                    endIcon={isSubmitting ? null : <SendIcon />}
                     sx={{ py: 1.8, fontSize: '1rem', fontWeight: 800 }}
                   >
-                    Submit Enquiry
+                    {isSubmitting ? <CircularProgress size={24} color="inherit" /> : 'Submit Enquiry'}
                   </Button>
                 </Stack>
               </form>

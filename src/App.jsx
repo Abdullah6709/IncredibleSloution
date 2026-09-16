@@ -21,14 +21,16 @@ export default function App() {
 
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
   const [submittedFormData, setSubmittedFormData] = useState(null);
+  const [emailStatus, setEmailStatus] = useState(null);
 
   const handleOpenSpecModal = (productKey) => {
     setActiveProductKey(productKey);
     setSpecModalOpen(true);
   };
 
-  const handleFormSubmit = (formData) => {
+  const handleFormSubmit = (formData, result) => {
     setSubmittedFormData(formData);
+    setEmailStatus(result || { success: true });
     setQuoteModalOpen(true);
   };
 
@@ -58,6 +60,7 @@ export default function App() {
       <QuoteConfirmationModal
         open={quoteModalOpen}
         data={submittedFormData}
+        emailStatus={emailStatus}
         onClose={() => setQuoteModalOpen(false)}
       />
 

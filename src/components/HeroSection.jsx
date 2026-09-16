@@ -10,7 +10,8 @@ import {
   MenuItem,
   Stack,
   Avatar,
-  InputAdornment
+  InputAdornment,
+  CircularProgress
 } from '@mui/material';
 import BoltIcon from '@mui/icons-material/Bolt';
 import ShieldIcon from '@mui/icons-material/Shield';
@@ -25,6 +26,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PowerIcon from '@mui/icons-material/Power';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import LockIcon from '@mui/icons-material/Lock';
+import { sendEnquiryEmail } from '../services/emailService';
 
 const capacities = [
   '1 kVA - 3 kVA Single Phase',
@@ -37,6 +39,7 @@ const capacities = [
 ];
 
 export default function HeroSection({ onSubmitForm }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [heroForm, setHeroForm] = useState({
     name: '',
     mobile: '',
@@ -49,19 +52,25 @@ export default function HeroSection({ onSubmitForm }) {
     setHeroForm({ ...heroForm, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!heroForm.name || !heroForm.mobile) {
       alert('Please fill in your Name and Mobile Number.');
       return;
     }
-    onSubmitForm({
+    setIsSubmitting(true);
+    const payload = {
       name: heroForm.name,
       mobile: heroForm.mobile,
       city: heroForm.city,
       capacity: heroForm.capacity,
       message: heroForm.requirement
-    });
+    };
+
+    const emailResult = await sendEnquiryEmail(payload);
+    setIsSubmitting(false);
+
+    onSubmitForm(payload, emailResult);
   };
 
   return (
@@ -374,7 +383,8 @@ export default function HeroSection({ onSubmitForm }) {
                     variant="contained"
                     fullWidth
                     size="large"
-                    endIcon={<ArrowForwardIcon />}
+                    disabled={isSubmitting}
+                    endIcon={isSubmitting ? null : <ArrowForwardIcon />}
                     sx={{
                       bgcolor: '#ffaa00',
                       color: '#0b2545',
@@ -384,7 +394,7 @@ export default function HeroSection({ onSubmitForm }) {
                       '&:hover': { bgcolor: '#ffb72b' }
                     }}
                   >
-                    Submit Enquiry
+                    {isSubmitting ? <CircularProgress size={24} color="inherit" /> : 'Submit Enquiry'}
                   </Button>
 
                   <Stack direction="row" spacing={1} justifyContent="center" alignItems="center" sx={{ mt: 0.5 }}>
