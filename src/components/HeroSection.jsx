@@ -11,13 +11,11 @@ import {
   Stack,
   Avatar,
   InputAdornment,
-  CircularProgress
 } from '@mui/material';
 import BoltIcon from '@mui/icons-material/Bolt';
 import ShieldIcon from '@mui/icons-material/Shield';
 import TimerIcon from '@mui/icons-material/Timer';
 import EnergySavingsLeafIcon from '@mui/icons-material/EnergySavingsLeaf';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import PhoneIcon from '@mui/icons-material/Phone';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import PersonIcon from '@mui/icons-material/Person';
@@ -25,8 +23,10 @@ import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PowerIcon from '@mui/icons-material/Power';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
-import LockIcon from '@mui/icons-material/Lock';
-import { sendEnquiryEmail } from '../services/emailService';
+import SendIcon from '@mui/icons-material/Send';
+
+const WHATSAPP_NUMBER = '919891916223';
+const CALL_NUMBER = '+919891916223';
 
 const capacities = [
   '1 kVA - 3 kVA Single Phase',
@@ -38,8 +38,7 @@ const capacities = [
   'UPS Batteries (Exide / Quanta)'
 ];
 
-export default function HeroSection({ onSubmitForm }) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+export default function HeroSection() {
   const [heroForm, setHeroForm] = useState({
     name: '',
     mobile: '',
@@ -52,25 +51,21 @@ export default function HeroSection({ onSubmitForm }) {
     setHeroForm({ ...heroForm, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!heroForm.name || !heroForm.mobile) {
-      alert('Please fill in your Name and Mobile Number.');
-      return;
-    }
-    setIsSubmitting(true);
-    const payload = {
-      name: heroForm.name,
-      mobile: heroForm.mobile,
-      city: heroForm.city,
-      capacity: heroForm.capacity,
-      message: heroForm.requirement
-    };
+  const handleWhatsApp = () => {
+    const lines = [
+      `Hi Incredible Solution, I need a UPS quote:`,
+      heroForm.name     ? `- Name: ${heroForm.name}`           : null,
+      heroForm.mobile   ? `- Mobile: ${heroForm.mobile}`       : null,
+      heroForm.city     ? `- City: ${heroForm.city}`           : null,
+      `- Capacity Required: ${heroForm.capacity}`,
+      heroForm.requirement ? `- Requirement: ${heroForm.requirement}` : null,
+    ].filter(Boolean).join('\n');
 
-    const emailResult = await sendEnquiryEmail(payload);
-    setIsSubmitting(false);
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines)}`, '_blank');
+  };
 
-    onSubmitForm(payload, emailResult);
+  const handleCall = () => {
+    window.location.href = `tel:${CALL_NUMBER}`;
   };
 
   return (
@@ -116,7 +111,7 @@ export default function HeroSection({ onSubmitForm }) {
             >
               Online UPS <br />
               <Box component="span" sx={{ color: '#ffaa00' }}>
-                Manufacturer & Supplier
+                Manufacturer &amp; Supplier
               </Box> <br />
               in India
             </Typography>
@@ -131,10 +126,10 @@ export default function HeroSection({ onSubmitForm }) {
                 lineHeight: 1.45
               }}
             >
-              High-Performance Online UPS Systems from 1 kVA to 1000+ kVA for Industrial, Commercial, IT & Critical Power Applications.
+              High-Performance Online UPS Systems from 1 kVA to 1000+ kVA for Industrial, Commercial, IT &amp; Critical Power Applications.
             </Typography>
 
-            {/* 4 Badges Grid - Hidden on Extra Small (XS) screens for clean mobile layout */}
+            {/* 4 Badges Grid */}
             <Grid
               container
               spacing={2}
@@ -144,52 +139,26 @@ export default function HeroSection({ onSubmitForm }) {
                 display: { xs: 'none', sm: 'flex' }
               }}
             >
-              <Grid item sm={3}>
-                <Stack alignItems="center" textAlign="center" spacing={1}>
-                  <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', width: 48, height: 48 }}>
-                    <BoltIcon sx={{ color: '#ffaa00' }} />
-                  </Avatar>
-                  <Typography variant="caption" sx={{ fontWeight: 700, fontSize: '0.82rem', lineHeight: 1.2 }}>
-                    Pure Sine Wave Output
-                  </Typography>
-                </Stack>
-              </Grid>
-
-              <Grid item sm={3}>
-                <Stack alignItems="center" textAlign="center" spacing={1}>
-                  <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', width: 48, height: 48 }}>
-                    <ShieldIcon sx={{ color: '#ffaa00' }} />
-                  </Avatar>
-                  <Typography variant="caption" sx={{ fontWeight: 700, fontSize: '0.82rem', lineHeight: 1.2 }}>
-                    High Efficiency
-                  </Typography>
-                </Stack>
-              </Grid>
-
-              <Grid item sm={3}>
-                <Stack alignItems="center" textAlign="center" spacing={1}>
-                  <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', width: 48, height: 48 }}>
-                    <TimerIcon sx={{ color: '#ffaa00' }} />
-                  </Avatar>
-                  <Typography variant="caption" sx={{ fontWeight: 700, fontSize: '0.82rem', lineHeight: 1.2 }}>
-                    Zero Transfer Time
-                  </Typography>
-                </Stack>
-              </Grid>
-
-              <Grid item sm={3}>
-                <Stack alignItems="center" textAlign="center" spacing={1}>
-                  <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', width: 48, height: 48 }}>
-                    <EnergySavingsLeafIcon sx={{ color: '#ffaa00' }} />
-                  </Avatar>
-                  <Typography variant="caption" sx={{ fontWeight: 700, fontSize: '0.82rem', lineHeight: 1.2 }}>
-                    Energy Saving
-                  </Typography>
-                </Stack>
-              </Grid>
+              {[
+                { icon: <BoltIcon sx={{ color: '#ffaa00' }} />, label: 'Pure Sine Wave Output' },
+                { icon: <ShieldIcon sx={{ color: '#ffaa00' }} />, label: 'High Efficiency' },
+                { icon: <TimerIcon sx={{ color: '#ffaa00' }} />, label: 'Zero Transfer Time' },
+                { icon: <EnergySavingsLeafIcon sx={{ color: '#ffaa00' }} />, label: 'Energy Saving' },
+              ].map(({ icon, label }) => (
+                <Grid item sm={3} key={label}>
+                  <Stack alignItems="center" textAlign="center" spacing={1}>
+                    <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', width: 48, height: 48 }}>
+                      {icon}
+                    </Avatar>
+                    <Typography variant="caption" sx={{ fontWeight: 700, fontSize: '0.82rem', lineHeight: 1.2 }}>
+                      {label}
+                    </Typography>
+                  </Stack>
+                </Grid>
+              ))}
             </Grid>
 
-            {/* Action Buttons Row - Streamlined for XS view */}
+            {/* Action Buttons */}
             <Stack
               direction={{ xs: 'column', sm: 'row' }}
               spacing={{ xs: 1.5, sm: 2 }}
@@ -198,29 +167,9 @@ export default function HeroSection({ onSubmitForm }) {
               <Button
                 variant="contained"
                 size="large"
-                endIcon={<ArrowForwardIcon />}
-                component="a"
-                href="#quote"
-                sx={{
-                  bgcolor: '#ffaa00',
-                  color: '#0b2545',
-                  fontWeight: 800,
-                  py: 1.4,
-                  px: 3,
-                  fontSize: '0.95rem',
-                  display: { xs: 'none', sm: 'inline-flex' },
-                  '&:hover': { bgcolor: '#ffb72b' }
-                }}
-              >
-                Get Best Quote
-              </Button>
-
-              <Button
-                variant="contained"
-                size="large"
                 startIcon={<PhoneIcon />}
                 component="a"
-                href="tel:+919891916223"
+                href={`tel:${CALL_NUMBER}`}
                 sx={{
                   bgcolor: '#0056b3',
                   color: 'white',
@@ -228,7 +177,6 @@ export default function HeroSection({ onSubmitForm }) {
                   py: 1.4,
                   px: 3,
                   fontSize: '0.95rem',
-                  display: { xs: 'none', sm: 'inline-flex' },
                   '&:hover': { bgcolor: '#004494' }
                 }}
               >
@@ -241,7 +189,7 @@ export default function HeroSection({ onSubmitForm }) {
                 size="large"
                 startIcon={<WhatsAppIcon />}
                 component="a"
-                href="https://wa.me/919891916223?text=Hi%20Incredible%20Solutions,%20I%20want%20to%20get%20a%20quote%20for%20Online%20UPS"
+                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hi Incredible Solution, I want to get a quote for Online UPS')}`}
                 target="_blank"
                 sx={{
                   fontWeight: 800,
@@ -256,7 +204,7 @@ export default function HeroSection({ onSubmitForm }) {
             </Stack>
           </Grid>
 
-          {/* Right Form Card: Embedded "Get Instant Quote" */}
+          {/* Right Card: WhatsApp Inquiry */}
           <Grid item xs={12} lg={5}>
             <Paper
               elevation={8}
@@ -269,6 +217,7 @@ export default function HeroSection({ onSubmitForm }) {
                 border: '1px solid rgba(255,255,255,0.2)'
               }}
             >
+              {/* Card Header */}
               <Box
                 sx={{
                   bgcolor: '#0b2545',
@@ -284,127 +233,71 @@ export default function HeroSection({ onSubmitForm }) {
                   Get Instant Quote
                 </Typography>
                 <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.8)', display: 'block', fontSize: { xs: '0.75rem', sm: '0.8rem' } }}>
-                  Fill in your details and our UPS experts will get back to you shortly.
+                  Fill your details and send via WhatsApp — we reply instantly!
                 </Typography>
               </Box>
 
-              <form onSubmit={handleSubmit}>
-                <Stack spacing={{ xs: 1.5, sm: 2 }}>
-                  <TextField
-                    fullWidth
-                    size="small"
-                    name="name"
-                    value={heroForm.name}
-                    onChange={handleChange}
-                    placeholder="Name*"
-                    required
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <PersonIcon fontSize="small" sx={{ color: 'text.secondary' }} />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
+              <Stack spacing={{ xs: 1.5, sm: 2 }}>
+                <TextField
+                  fullWidth size="small" name="name"
+                  value={heroForm.name} onChange={handleChange}
+                  placeholder="Name"
+                  InputProps={{ startAdornment: <InputAdornment position="start"><PersonIcon fontSize="small" sx={{ color: 'text.secondary' }} /></InputAdornment> }}
+                />
+                <TextField
+                  fullWidth size="small" name="mobile"
+                  value={heroForm.mobile} onChange={handleChange}
+                  placeholder="Mobile Number"
+                  InputProps={{ startAdornment: <InputAdornment position="start"><PhoneIphoneIcon fontSize="small" sx={{ color: 'text.secondary' }} /></InputAdornment> }}
+                />
+                <TextField
+                  fullWidth size="small" name="city"
+                  value={heroForm.city} onChange={handleChange}
+                  placeholder="City"
+                  InputProps={{ startAdornment: <InputAdornment position="start"><LocationOnIcon fontSize="small" sx={{ color: 'text.secondary' }} /></InputAdornment> }}
+                />
+                <TextField
+                  select fullWidth size="small" name="capacity"
+                  value={heroForm.capacity} onChange={handleChange}
+                  InputProps={{ startAdornment: <InputAdornment position="start"><PowerIcon fontSize="small" sx={{ color: 'text.secondary' }} /></InputAdornment> }}
+                >
+                  {capacities.map((cap) => (
+                    <MenuItem key={cap} value={cap}>{cap}</MenuItem>
+                  ))}
+                </TextField>
+                <TextField
+                  fullWidth size="small" name="requirement"
+                  value={heroForm.requirement} onChange={handleChange}
+                  placeholder="Your Requirement (Optional)"
+                  InputProps={{ startAdornment: <InputAdornment position="start"><NoteAltIcon fontSize="small" sx={{ color: 'text.secondary' }} /></InputAdornment> }}
+                />
 
-                  <TextField
-                    fullWidth
-                    size="small"
-                    name="mobile"
-                    value={heroForm.mobile}
-                    onChange={handleChange}
-                    placeholder="Mobile Number*"
-                    required
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <PhoneIphoneIcon fontSize="small" sx={{ color: 'text.secondary' }} />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
+                {/* WhatsApp Send Button */}
+                <Button
+                  variant="contained"
+                  color="success"
+                  fullWidth
+                  size="large"
+                  startIcon={<WhatsAppIcon />}
+                  endIcon={<SendIcon />}
+                  onClick={handleWhatsApp}
+                  sx={{ fontWeight: 800, py: 1.4, fontSize: '0.98rem' }}
+                >
+                  Send via WhatsApp
+                </Button>
 
-                  <TextField
-                    fullWidth
-                    size="small"
-                    name="city"
-                    value={heroForm.city}
-                    onChange={handleChange}
-                    placeholder="City"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <LocationOnIcon fontSize="small" sx={{ color: 'text.secondary' }} />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-
-                  <TextField
-                    select
-                    fullWidth
-                    size="small"
-                    name="capacity"
-                    value={heroForm.capacity}
-                    onChange={handleChange}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <PowerIcon fontSize="small" sx={{ color: 'text.secondary' }} />
-                        </InputAdornment>
-                      ),
-                    }}
-                  >
-                    {capacities.map((cap) => (
-                      <MenuItem key={cap} value={cap}>
-                        {cap}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-
-                  <TextField
-                    fullWidth
-                    size="small"
-                    name="requirement"
-                    value={heroForm.requirement}
-                    onChange={handleChange}
-                    placeholder="Your Requirement (Optional)"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <NoteAltIcon fontSize="small" sx={{ color: 'text.secondary' }} />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    fullWidth
-                    size="large"
-                    disabled={isSubmitting}
-                    endIcon={isSubmitting ? null : <ArrowForwardIcon />}
-                    sx={{
-                      bgcolor: '#ffaa00',
-                      color: '#0b2545',
-                      fontWeight: 800,
-                      py: 1.4,
-                      fontSize: '0.98rem',
-                      '&:hover': { bgcolor: '#ffb72b' }
-                    }}
-                  >
-                    {isSubmitting ? <CircularProgress size={24} color="inherit" /> : 'Submit Enquiry'}
-                  </Button>
-
-                  <Stack direction="row" spacing={1} justifyContent="center" alignItems="center" sx={{ mt: 0.5 }}>
-                    <LockIcon sx={{ fontSize: 14, color: 'success.main' }} />
-                    <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600, fontSize: '0.72rem' }}>
-                      Your data is safe with us
-                    </Typography>
-                  </Stack>
-                </Stack>
-              </form>
+                {/* Call Button */}
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  size="large"
+                  startIcon={<PhoneIcon />}
+                  onClick={handleCall}
+                  sx={{ fontWeight: 800, py: 1.3, fontSize: '0.95rem', borderColor: '#0056b3', color: '#0056b3', '&:hover': { bgcolor: '#eef5ff' } }}
+                >
+                  Or Call: +91 98919 16223
+                </Button>
+              </Stack>
             </Paper>
           </Grid>
         </Grid>
