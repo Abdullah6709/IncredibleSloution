@@ -28,7 +28,7 @@ function getTransporter() {
   const host = envConfig.SMTP_HOST || process.env.SMTP_HOST || 'smtp.gmail.com';
   const port = parseInt(envConfig.SMTP_PORT || process.env.SMTP_PORT || '587');
   const secure = (envConfig.SMTP_SECURE || process.env.SMTP_SECURE) === 'true';
-  const user = (envConfig.SMTP_USER || process.env.SMTP_USER || 'raturiincredible@gmail.com').trim();
+  const user = (envConfig.SMTP_USER || process.env.SMTP_USER || 'kamleshraturi36@gmail.com').trim();
   const pass = (envConfig.SMTP_PASS || process.env.SMTP_PASS || '').replace(/\s+/g, '');
 
   const transportOptions = (host === 'smtp.gmail.com' || !host)
@@ -68,7 +68,7 @@ app.post('/api/send-email', async (req, res) => {
     });
   }
 
-  const recipientEmail = process.env.TO_EMAIL || 'raturiincredible@gmail.com';
+  const recipientEmail = process.env.TO_EMAIL || 'kamleshraturi36@gmail.com';
 
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">

@@ -1,93 +1,62 @@
 /**
- * Service to handle direct enquiry email delivery to client email.
- * Uses FormSubmit Web Relay to deliver straight to raturiincredible@gmail.com
- * without requiring client email passwords or SMTP authentication.
+ * Service to handle enquiry email delivery via the local SMTP backend server.
+ * Calls POST /api/send-email on the Node/Express server (server.js).
+ * The backend uses Nodemailer + Gmail App Password — no third-party activation needed.
+ *
+ * Run the backend with:  npm run server
  */
 
-const TARGET_EMAIL = 'raturiincredible@gmail.com';
+const API_URL = 'http://localhost:5000/api/send-email';
 
 export async function sendEnquiryEmail(formData) {
-  const payload = {
-    'Customer Name': formData.name,
-    'Mobile Number': formData.mobile,
-    'Email Address': formData.email || 'Not provided',
-    'City / Location': formData.city || 'N/A',
-    'UPS Capacity Required': formData.capacity,
-    'Additional Message': formData.message || 'No additional details provided.',
-    _subject: `⚡ Online UPS Enquiry: ${formData.name} (${formData.mobile})`,
-    _template: 'table',
-    _captcha: 'false',
-    ...(formData.email ? { _replyto: formData.email } : {})
-  };
-
-  // 1. Direct Web Relay (FormSubmit) - Zero Password Required
   try {
-    const response = await fetch(`https://formsubmit.co/ajax/${TARGET_EMAIL}`, {
+    const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        name:     formData.name,
+        mobile:   formData.mobile,
+        email:    formData.email    || '',
+        city:     formData.city     || '',
+        capacity: formData.capacity || '',
+        message:  formData.message  || '',
+      }),
     });
 
     const data = await response.json();
-    if (response.ok && (data.success === 'true' || data.success === true)) {
+
+    if (response.ok && data.success) {
       return {
         success: true,
-        provider: 'Direct Web Relay',
-        message: 'Your inquiry has been submitted and delivered directly to raturiincredible@gmail.com!'
+        provider: 'SMTP',
+        message: 'Your inquiry has been submitted successfully! Our team will contact you shortly.',
       };
-    } else if (data.message && data.message.toLowerCase().includes('activation')) {
+    }
+
+    return {
+      success: false,
+      provider: 'SMTP',
+      error: data.error || 'Submission failed. Please try again.',
+    };
+
+  } catch (err) {
+    console.error('SMTP backend error:', err);
+
+    // Friendly message if the backend server is not running
+    if (err instanceof TypeError && err.message.includes('fetch')) {
       return {
         success: false,
-        needsActivation: true,
-        provider: 'Direct Web Relay',
-        error: "Action Required: FormSubmit sent an activation email to raturiincredible@gmail.com. Please ask the client to open that email (check Spam folder too) and click 'Activate Form' once."
+        provider: 'SMTP',
+        error: 'Could not reach the email server. Please make sure the backend is running (npm run server).',
       };
     }
-  } catch (relayErr) {
-    console.warn('Direct web relay encountered network notice:', relayErr);
-  }
 
-  // 2. Web3Forms fallback if configured
-  const web3FormsKey = import.meta.env?.VITE_WEB3FORMS_ACCESS_KEY;
-  if (web3FormsKey) {
-    try {
-      const response = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          access_key: web3FormsKey,
-          name: formData.name,
-          mobile: formData.mobile,
-          email: formData.email,
-          city: formData.city,
-          capacity: formData.capacity,
-          message: formData.message,
-          _subject: `⚡ Online UPS Enquiry: ${formData.name} (${formData.mobile})`
-        })
-      });
-      const data = await response.json();
-      if (data.success) {
-        return {
-          success: true,
-          provider: 'Web3Forms',
-          message: 'Enquiry sent successfully!'
-        };
-      }
-    } catch (err) {
-      console.warn('Web3Forms dispatch error:', err);
-    }
+    return {
+      success: false,
+      provider: 'SMTP',
+      error: 'Network error. Please check your internet connection and try again.',
+    };
   }
-
-  // Fallback: Always return success for user UX so inquiry is preserved & logged
-  return {
-    success: true,
-    provider: 'Direct Web Relay',
-    message: 'Your enquiry has been received! Our team will contact you shortly.'
-  };
 }
